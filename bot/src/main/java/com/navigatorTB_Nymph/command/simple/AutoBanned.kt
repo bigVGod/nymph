@@ -16,10 +16,6 @@ object AutoBanned : SimpleCommand(
     suspend fun MemberCommandSenderOnMessage.main(durationSeconds: Int) {
         UsageStatistics.record(primaryName)
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         if (!group.botPermission.isOperator()) {
             sendMessage("TB在本群没有管理员权限，无法使用本功能")
             return
@@ -39,10 +35,6 @@ object AutoBanned : SimpleCommand(
     suspend fun MemberCommandSenderOnMessage.main(MemberTarget: Member, durationSeconds: Int) {
         UsageStatistics.record(primaryName)
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
 
         if (!group.botPermission.isOperator()) {
             sendMessage("TB在本群没有管理员权限，无法使用本功能")

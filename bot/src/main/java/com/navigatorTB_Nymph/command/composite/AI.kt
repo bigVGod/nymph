@@ -21,10 +21,6 @@ object AI : CompositeCommand(
     @SubCommand("教学")
     suspend fun MemberCommandSenderOnMessage.teaching(question: String, answer: String) {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
 
         val userDBObject = SQLiteJDBC(PluginMain.resolveDataPath("User.db"))
         val policy = UserPolicy(
@@ -80,10 +76,6 @@ object AI : CompositeCommand(
     @SubCommand("模板教学")
     suspend fun MemberCommandSenderOnMessage.templateTeaching(question: String, answer: String) {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         val templateIdentifierQ = "\\[]".toRegex()
         val templateIdentifierA = "\\[(.*?)]".toRegex()
         val patternQ = ("^${templateIdentifierQ.replace(question, "(.+)")}$")
@@ -96,10 +88,6 @@ object AI : CompositeCommand(
     @SubCommand("查询")
     suspend fun MemberCommandSenderOnMessage.query(key: String) {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
 
         val dbObject = SQLiteJDBC(PluginMain.resolveDataPath("AI.db"))
         val entryList = dbObject.executeQuerySQL(
@@ -141,10 +129,6 @@ object AI : CompositeCommand(
     @SubCommand("模板查询")
     suspend fun MemberCommandSenderOnMessage.templateQuery() {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         val qaSet = AiTemplate.QASheet[group.id]
         if (qaSet.isNullOrEmpty()) {
             sendMessage("本群尚无问答模板")
@@ -162,10 +146,6 @@ object AI : CompositeCommand(
     @SubCommand("统计")
     suspend fun MemberCommandSenderOnMessage.statistics() {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
 
         val dbObject = SQLiteJDBC(PluginMain.resolveDataPath("AI.db"))
         val entryList = dbObject.executeQuerySQL("SELECT * FROM Corpus;", "AI统计\nFile:AI.kt\tLine:132").run {
@@ -186,10 +166,6 @@ object AI : CompositeCommand(
     @SubCommand("EID查询")
     suspend fun MemberCommandSenderOnMessage.eIDMain(EID: Int) {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
 
         val dbObject = SQLiteJDBC(PluginMain.resolveDataPath("AI.db"))
         val entryList = dbObject.select("Corpus", Triple("id", "=", "$EID"), "AI_EID查询\nFile:AI.kt\tLine:156").run {
@@ -215,10 +191,6 @@ object AI : CompositeCommand(
     @SubCommand("删除")
     suspend fun MemberCommandSenderOnMessage.delete(EID: Int) {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
 
         val dbObject = SQLiteJDBC(PluginMain.resolveDataPath("AI.db"))
         val entry = dbObject.selectOne("Corpus", Triple("id", "=", "$EID"), "AI删除\nFile:AI.kt\tLine:185").run {

@@ -14,10 +14,6 @@ object Test : CompositeCommand(
     @SubCommand("群列表")
     suspend fun MemberCommandSenderOnMessage.gl() {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         if (user.id == MySetting.AdminID) {
             sendMessage("OK")
             val list = mutableSetOf<Long>()
@@ -29,10 +25,6 @@ object Test : CompositeCommand(
     @SubCommand("状态测试")
     suspend fun MemberCommandSenderOnMessage.gst(groupID: Long) {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         val group = bot.getGroup(groupID)
         if (group != null) {
             runCatching {
@@ -48,10 +40,6 @@ object Test : CompositeCommand(
     @SubCommand("内测功能")
     suspend fun MemberCommandSenderOnMessage.alpha() {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         if (user.id == MySetting.AdminID) {
             val cache = group.members.toMutableList()
             cache.sortByDescending { it.lastSpeakTimestamp }

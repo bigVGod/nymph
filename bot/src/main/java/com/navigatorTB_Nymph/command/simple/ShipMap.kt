@@ -20,10 +20,6 @@ object ShipMap : SimpleCommand(
     suspend fun MemberCommandSenderOnMessage.main(uncheckedIndex: String) {
         UsageStatistics.record(primaryName)
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
 
         val pretreatmentIndex = uncheckedIndex.replace("—", "-").toCharArray()
         pretreatmentIndex.forEachIndexed { index, char ->
@@ -37,10 +33,6 @@ object ShipMap : SimpleCommand(
     @Handler
     suspend fun MemberCommandSenderOnMessage.main() {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         sendMessage("参数不匹配, 你是否想执行:\n $usage")
     }
 

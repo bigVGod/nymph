@@ -21,10 +21,6 @@ object PushBoxGame : CompositeCommand(
     @SubCommand("新游戏")
     suspend fun MemberCommandSenderOnMessage.start() {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         val pushBox = PushBox(PushBoxLevelMap.groupCompleteLevel.getOrPut(group.id) { 0 })
         PluginMain.PUSH_BOX[group.id] = pushBox
         subject.sendImage(pushBox.draw())
@@ -33,10 +29,6 @@ object PushBoxGame : CompositeCommand(
     @SubCommand("移动")
     suspend fun MemberCommandSenderOnMessage.move(x: Int, y: Int) {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         val pushBox = PluginMain.PUSH_BOX[group.id]
         if (pushBox != null) {
 //            pushBox.debug()
@@ -52,10 +44,6 @@ object PushBoxGame : CompositeCommand(
     @SubCommand("推")
     suspend fun MemberCommandSenderOnMessage.push(direction: String, distance: Int) {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         val pushBox = PluginMain.PUSH_BOX[group.id]
 
         if (pushBox != null) {
@@ -87,10 +75,6 @@ object PushBoxGame : CompositeCommand(
     @SubCommand("重新开始")
     suspend fun MemberCommandSenderOnMessage.restart() {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         val pushBox = PluginMain.PUSH_BOX[group.id]
 
         if (pushBox != null) {

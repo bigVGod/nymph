@@ -46,7 +46,7 @@ object MySetting : AutoSavePluginConfig("TB_Setting") {
     val undisturbed: List<Int> by value(listOf(-1))
 
     @ValueDescription("启用常驻定时任务")
-    val resident: Boolean by value(false)
+    val resident: Boolean by value(true)
     //    @ValueDescription("数量") // 注释写法, 将会保存在 MySetting.yml 文件中.
 //    var count by value(0)
 //    val nested by value<MyNestedData>() // 嵌套类型是支持的

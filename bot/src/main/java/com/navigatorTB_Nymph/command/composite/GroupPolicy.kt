@@ -37,10 +37,6 @@ object GroupPolicy : CompositeCommand(
     @SubCommand("群策略设定状态汇报", "汇报")
     suspend fun MemberCommandSenderOnMessage.report() {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         val dbObject = SQLiteJDBC(PluginMain.resolveDataPath("User.db"))
         val policy = UserPolicy(
             dbObject.selectOne(
@@ -95,10 +91,6 @@ object GroupPolicy : CompositeCommand(
     @SubCommand("免打扰模式")
     suspend fun MemberCommandSenderOnMessage.tellUndisturbed(value: Int) {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         if (permissionCheck(user)) {
             sendMessage("权限不足")
             return
@@ -127,10 +119,6 @@ object GroupPolicy : CompositeCommand(
     @SubCommand("免打扰模式")
     suspend fun MemberCommandSenderOnMessage.tellUndisturbed() {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         sendMessage(
             """
             无效模式参数，设定失败,请参考以下示范命令
@@ -146,10 +134,6 @@ object GroupPolicy : CompositeCommand(
     @SubCommand("新成员通报")
     suspend fun MemberCommandSenderOnMessage.tellNotification(value: Int) {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         if (permissionCheck(user)) {
             sendMessage("权限不足")
             return
@@ -178,10 +162,6 @@ object GroupPolicy : CompositeCommand(
     @SubCommand("新成员通报")
     suspend fun MemberCommandSenderOnMessage.tellNotification() {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         sendMessage(
             """
             无效模式参数，设定失败,请参考以下示范命令
@@ -197,10 +177,6 @@ object GroupPolicy : CompositeCommand(
     @SubCommand("报时模式")
     suspend fun MemberCommandSenderOnMessage.tellTime(mode: Int) {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         if (permissionCheck(user)) {
             sendMessage("权限不足")
             return
@@ -239,10 +215,6 @@ object GroupPolicy : CompositeCommand(
     @SubCommand("报时模式")
     suspend fun MemberCommandSenderOnMessage.tellTime() {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         val info: MutableList<String> = mutableListOf()
         MyPluginData.tellTimeMode.forEach {
             info.add("${it.key}\t    ${it.value}")
@@ -253,10 +225,6 @@ object GroupPolicy : CompositeCommand(
     @SubCommand("订阅模式")
     suspend fun MemberCommandSenderOnMessage.subscription(mode: Int) {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         if (permissionCheck(user)) {
             sendMessage("权限不足")
             return
@@ -297,10 +265,6 @@ object GroupPolicy : CompositeCommand(
     @SubCommand("订阅模式")
     suspend fun MemberCommandSenderOnMessage.subscription() {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         sendMessage(
             """
             无效模式参数，设定失败,请参考以下示范命令
@@ -319,10 +283,6 @@ object GroupPolicy : CompositeCommand(
     @SubCommand("每日提醒模式")
     suspend fun MemberCommandSenderOnMessage.dailyReminder(mode: Int) {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         if (permissionCheck(user)) {
             sendMessage("权限不足")
             return
@@ -357,10 +317,6 @@ object GroupPolicy : CompositeCommand(
     @SubCommand("每日提醒模式")
     suspend fun MemberCommandSenderOnMessage.dailyReminder() {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         sendMessage(
             """
             无效模式参数，设定失败,请参考以下示范命令
@@ -378,10 +334,6 @@ object GroupPolicy : CompositeCommand(
     @SubCommand("教学许可")
     suspend fun MemberCommandSenderOnMessage.teaching(switch: Int) {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         if (permissionCheck(user)) {
             sendMessage("权限不足")
             return
@@ -410,10 +362,6 @@ object GroupPolicy : CompositeCommand(
     @SubCommand("教学许可")
     suspend fun MemberCommandSenderOnMessage.teaching() {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         sendMessage(
             """
             无效模式参数，设定失败,请参考以下示范命令
@@ -429,10 +377,6 @@ object GroupPolicy : CompositeCommand(
     @SubCommand("对话概率")
     suspend fun MemberCommandSenderOnMessage.triggerProbability(value: Int) {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         if (permissionCheck(user)) {
             sendMessage("权限不足")
             return
@@ -451,10 +395,6 @@ object GroupPolicy : CompositeCommand(
     @SubCommand("对话概率")
     suspend fun MemberCommandSenderOnMessage.triggerProbability() {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         sendMessage(
             """
             无效模式参数，设定失败,请参考以下示范命令
@@ -469,10 +409,6 @@ object GroupPolicy : CompositeCommand(
     @SubCommand("色图许可")
     suspend fun MemberCommandSenderOnMessage.acgImage(token: String) {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         if (permissionCheck(user)) {
             sendMessage("权限不足")
             return
@@ -505,10 +441,6 @@ object GroupPolicy : CompositeCommand(
     @SubCommand("色图许可")
     suspend fun MemberCommandSenderOnMessage.acgImage() {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         sendMessage(
             """
             无效模式参数，设定失败,请参考以下示范命令

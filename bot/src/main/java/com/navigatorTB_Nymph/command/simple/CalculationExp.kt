@@ -18,10 +18,6 @@ object CalculationExp : SimpleCommand(
     suspend fun MemberCommandSenderOnMessage.main(current_level: Int, lvOrExp: Int, special: Boolean = false) {
         UsageStatistics.record(primaryName)
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         if (lvOrExp <= 125) {
             val balance = (current_level until lvOrExp).fold(0) { accExp: Int, level: Int ->
                 val result = accExp + calculateParts(level, special)
@@ -43,10 +39,6 @@ object CalculationExp : SimpleCommand(
     @Handler
     suspend fun MemberCommandSenderOnMessage.main() {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         sendMessage("参数不匹配, 你是否想执行:\n $usage")
     }
 

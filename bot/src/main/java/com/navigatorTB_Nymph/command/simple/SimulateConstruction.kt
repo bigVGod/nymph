@@ -30,10 +30,6 @@ object SimulateConstruction : SimpleCommand(
     @Handler
     suspend fun MemberCommandSenderOnMessage.main(mode: String, count: Int) {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         if (count !in 1..10) {
             sendMessage("建造次数应为 [1, 10] 区间内")
             return

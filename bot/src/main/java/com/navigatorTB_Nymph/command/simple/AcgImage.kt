@@ -30,10 +30,6 @@ object AcgImage : SimpleCommand(
     suspend fun MemberCommandSenderOnMessage.main(tag: String? = null) {
         UsageStatistics.record(primaryName)
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
 
         if (MyPluginData.AcgImageRun.contains(group.id)) {
             sendMessage("功能运行中，请等待")

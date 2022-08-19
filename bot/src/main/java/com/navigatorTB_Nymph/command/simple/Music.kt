@@ -29,10 +29,6 @@ object Music : SimpleCommand(
     suspend fun MemberCommandSenderOnMessage.main(musicName: String, type: Int = 1) {
         UsageStatistics.record(primaryName)
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         runCatching {
             val rMessage = when (type) {
                 1 -> getQQMusic(musicName, user.avatarUrl)

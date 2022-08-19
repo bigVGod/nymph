@@ -21,10 +21,6 @@ object Schedule : CompositeCommand(
     @SubCommand("添加任务")
     suspend fun MemberCommandSenderOnMessage.addSchedule(command: String) {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         val t = LocalDateTime.now()
         val serialNumber = t.dayOfYear * 10000 + t.hour * 100 + t.minute //序列号
 
@@ -57,20 +53,12 @@ object Schedule : CompositeCommand(
     @SubCommand("查询")
     suspend fun MemberCommandSenderOnMessage.querySchedule() {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         sendMessage(CronJob.query())
     }
 
     @SubCommand("查询")
     suspend fun MemberCommandSenderOnMessage.querySchedule(startTime: Int) {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         sendMessage(CronJob.query(startTime))
     }
 }

@@ -21,10 +21,6 @@ object MinesweeperGame : CompositeCommand(
     @SubCommand("开始", "新游戏")
     suspend fun MemberCommandSenderOnMessage.start(level: String) {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
 
         val minesweeperGame = when (level) {
             "中级" -> Minesweeper(LevelSet.General)
@@ -42,10 +38,6 @@ object MinesweeperGame : CompositeCommand(
     @SubCommand("开始", "新游戏")
     suspend fun MemberCommandSenderOnMessage.start(width: Int, height: Int, mines: Int) {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         if (width >= 40 || height >= 60 || mines >= width * height) {
             sendMessage("创建自定义游戏失败,请检查：\n1、棋盘宽不能大于40;\n2、高不能大于60;\n3、雷数不应超出地块总数;")
         } else {
@@ -58,10 +50,6 @@ object MinesweeperGame : CompositeCommand(
     @SubCommand("挖开")
     suspend fun MemberCommandSenderOnMessage.dig(x: Int, y: Int) {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         val minesweeperGame = PluginMain.MINESWEEPER_GAME[group.id]
         if (minesweeperGame != null) {
             when (minesweeperGame.dig(x, y)) {
@@ -83,10 +71,6 @@ object MinesweeperGame : CompositeCommand(
     @SubCommand("插旗")
     suspend fun MemberCommandSenderOnMessage.flag(x: Int, y: Int) {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         val minesweeperGame = PluginMain.MINESWEEPER_GAME[group.id]
         if (minesweeperGame != null) {
             minesweeperGame.put(x, y)
@@ -98,10 +82,6 @@ object MinesweeperGame : CompositeCommand(
     @SubCommand("拔旗")
     suspend fun MemberCommandSenderOnMessage.unplug(x: Int, y: Int) {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         val minesweeperGame = PluginMain.MINESWEEPER_GAME[group.id]
         if (minesweeperGame != null) {
             minesweeperGame.unplug(x, y)

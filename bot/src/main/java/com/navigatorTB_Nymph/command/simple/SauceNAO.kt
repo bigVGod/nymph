@@ -29,10 +29,6 @@ object SauceNAO : SimpleCommand(
     suspend fun MemberCommandSenderOnMessage.main(image: Image) {
         UsageStatistics.record(primaryName)
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         sendMessage("开始查询，请稍后...")
         val jsonObjString = getJSON(image.queryUrl())
         if (jsonObjString == null) {
@@ -127,10 +123,6 @@ object SauceNAO : SimpleCommand(
     @Handler
     suspend fun MemberCommandSenderOnMessage.main() {
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         sendMessage("请在60秒内提供要搜的图...")
         val image = withTimeoutOrNull(60_000) {
             GlobalEventChannel.syncFromEvent<GroupMessageEvent, Image>(EventPriority.MONITOR) {

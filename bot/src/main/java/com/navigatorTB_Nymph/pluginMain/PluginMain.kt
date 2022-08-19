@@ -112,6 +112,8 @@ object PluginMain : KotlinPlugin(
         CultivationSystem.register()// 养成系统
         SimulateConstruction.register()// 模拟建造
 
+        ScienceQuery.INSTANCE.register()
+
         MyHelp.register()           // 帮助功能
 
         this.globalEventChannel().subscribeAlways<Event> {

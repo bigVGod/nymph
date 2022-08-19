@@ -27,10 +27,6 @@ object Wordle : SimpleCommand(
     suspend fun MemberCommandSenderOnMessage.main() {
         UsageStatistics.record(primaryName)
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
 
         val dbObject = SQLiteJDBC(PluginMain.resolveDataPath("AssetData.db"))
         val ctAn = AssetDataWordle(dbObject.selectRandom("Wordle", "猜单词\nFile:Wordle.kt\tLine:32")).word

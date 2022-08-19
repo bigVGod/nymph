@@ -33,12 +33,20 @@ object GroupWife : SimpleCommand(
 
     @Handler
     suspend fun MemberCommandSenderOnMessage.main() {
-        UsageStatistics.record(primaryName)
-        if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
+        if (user.id == 907634014L){
+            val chain = MessageChainBuilder()
+            chain.add("你的专属群老婆是")
+            chain.add(
+                (withContext(Dispatchers.IO) {
+                    URL(bot.avatarUrl).openConnection().getInputStream()
+                }).uploadAsImage(group)
+            )
+            chain.add("${bot.nameCardOrNick}(${bot.id})哒！小韭菜永远爱你呦~")
+            sendMessage(chain.build())
             return
         }
+        UsageStatistics.record(primaryName)
+        if (group.botMuteRemaining > 0) return
 
         if (LocalDateTime.now().dayOfYear != groupWifeUpdate) cleanList()
 
@@ -76,10 +84,6 @@ object GroupWife : SimpleCommand(
     suspend fun MemberCommandSenderOnMessage.main(beau: Member) {
         UsageStatistics.record(primaryName)
         if (group.botMuteRemaining > 0) return
-        if (group.id !in ActiveGroupList.user) {
-            sendMessage("本群授权已到期,请续费后使用")
-            return
-        }
         if (LocalDateTime.now().dayOfYear != groupWifeUpdate) cleanList()
 
         val ntrList = ntrMap.getOrPut(group.id) { mutableListOf() }
