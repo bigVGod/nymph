@@ -1,7 +1,6 @@
 package com.navigatorTB_Nymph.command.simple
 
 import com.navigatorTB_Nymph.data.AssetDataAzurLaneConstructTime
-import com.navigatorTB_Nymph.pluginData.ActiveGroupList
 import com.navigatorTB_Nymph.pluginData.UsageStatistics
 import com.navigatorTB_Nymph.pluginMain.PluginMain
 import com.navigatorTB_Nymph.tool.sql.SQLiteJDBC
@@ -96,6 +95,7 @@ object Construction : SimpleCommand(
                     when (it.limitedTime) {
                         1 -> "限时"
                         2 -> "建造绝版"
+                        3 -> "勋章支援"
                         else -> "常驻"
                     }
                 }"

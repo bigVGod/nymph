@@ -2,32 +2,22 @@ package com.navigatorTB_Nymph.pluginMain
 
 import com.mayabot.nlp.module.summary.KeywordSummary
 import com.mayabot.nlp.segment.Lexers
-import com.navigatorTB_Nymph.command.composite.*
+import com.navigatorTB_Nymph.Timer.DynamicsTimer
+import com.navigatorTB_Nymph.command.composite.AI
+import com.navigatorTB_Nymph.command.composite.GroupPolicy
+import com.navigatorTB_Nymph.command.composite.WikiAzurLane
 import com.navigatorTB_Nymph.command.simple.*
 import com.navigatorTB_Nymph.data.Role
 import com.navigatorTB_Nymph.data.UserPolicy
 import com.navigatorTB_Nymph.data.UserResponsible
-import com.navigatorTB_Nymph.defaultJob.DailyReminder
-import com.navigatorTB_Nymph.defaultJob.DynamicPush
-import com.navigatorTB_Nymph.defaultJob.TellTime
-import com.navigatorTB_Nymph.game.crowdVerdict.VoteUser
-import com.navigatorTB_Nymph.game.duel.Gun
-import com.navigatorTB_Nymph.game.minesweeper.Minesweeper
-import com.navigatorTB_Nymph.game.pushBox.PushBox
-import com.navigatorTB_Nymph.game.ticTacToe.TicTacToe
 import com.navigatorTB_Nymph.pluginConfig.MySetting
 import com.navigatorTB_Nymph.pluginConfig.MySetting.prohibitedWord
 import com.navigatorTB_Nymph.pluginData.*
-import com.navigatorTB_Nymph.tool.cronJob.CronJob
 import com.navigatorTB_Nymph.tool.sql.SQLiteJDBC
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
 import net.mamoe.mirai.console.command.CommandManager.INSTANCE.register
-import net.mamoe.mirai.console.command.CommandManager.INSTANCE.unregister
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.contact.AnonymousMember
-import net.mamoe.mirai.contact.Member
 import net.mamoe.mirai.contact.nameCardOrNick
 import net.mamoe.mirai.event.Event
 import net.mamoe.mirai.event.EventPriority
@@ -37,7 +27,7 @@ import net.mamoe.mirai.event.subscribeGroupMessages
 import net.mamoe.mirai.message.data.*
 import net.mamoe.mirai.utils.MiraiExperimentalApi
 import net.mamoe.mirai.utils.info
-import java.time.LocalDateTime
+import java.util.*
 
 
 object PluginMain : KotlinPlugin(
@@ -54,14 +44,13 @@ object PluginMain : KotlinPlugin(
     // 关键词提取
     val KEYWORD_SUMMARY = KeywordSummary()
 
-    val VOTES: MutableMap<Long, VoteUser> = mutableMapOf()
-    val MINESWEEPER_GAME = mutableMapOf<Long, Minesweeper>()
-    val PUSH_BOX = mutableMapOf<Long, PushBox>()
-    val TIC_TAC_TOE_GAME = mutableMapOf<Long, TicTacToe>()
-    val BOTH_SIDES_DUEL = mutableMapOf<Member, Gun>()
-
     @OptIn(MiraiExperimentalApi::class)
     override fun onEnable() {
+
+        val timer = Timer();
+        // 30秒轮巡动态
+        timer.schedule(DynamicsTimer(), 0, 30000);
+
         MySetting.reload()
 
         MyPluginData.reload()
@@ -69,7 +58,6 @@ object PluginMain : KotlinPlugin(
         ActiveGroupList.reload()
         Article.reload()
         AiTemplate.reload()
-        PushBoxLevelMap.reload()
         MirrorWorldUser.reload()
 
         Class.forName("org.sqlite.JDBC")
@@ -82,37 +70,26 @@ object PluginMain : KotlinPlugin(
         }
 
         SignIn.register()           // 签到
-        CrowdVerdict.register()     // 众裁
-        SauceNAO.register()         // 搜图
-        MinesweeperGame.register()  // 扫雷
-        Test.register()             // 测试
-        Schedule.register()         // 日程表
-        TicTacToeGame.register()    // 井字棋
-        Calculator.register()       // 计算器
-        Music.register()            // 点歌姬
         GroupPolicy.register()      // 群策略
-        Wordle.register()           // 猜单词
-        PushBoxGame.register()      // 推箱子
         GroupWife.register()        // 群老婆
-        ASoulArticle.register()     // 小作文
-        RollDice.register()         // 简易骰娘
-        AutoBanned.register()       // 自助禁言
-        Duel.register()             // 禁言决斗
-        TraceMoe.register()         // 以图搜番
-        AcgImage.register()         // 随机图片
         Construction.register()     // 建造时间
         ShipMap.register()          // 打捞地图
-        SendDynamic.register()      // 动态查询
         WikiAzurLane.register()     // 碧蓝Wiki
         CalculationExp.register()   // 经验计算器
         Birthday.register()         // 舰船下水日
         Roster.register()           // 碧蓝和谐名
         AI.register()               // 图灵数据库增删改查
-        PlayerInfo.register()       // 玩家信息
-        CultivationSystem.register()// 养成系统
         SimulateConstruction.register()// 模拟建造
 
         ScienceQuery.INSTANCE.register()
+        SkinQuery.INSTANCE.register()
+        Steal.INSTANCE.register()
+        StealQuery.INSTANCE.register()
+        RankQuery.INSTANCE.register()
+        DateQuery.INSTANCE.register()
+        DynamicQuery.INSTANCE.register()
+        EquipQuery.INSTANCE.register()
+//        Test.INSTANCE.register()
 
         MyHelp.register()           // 帮助功能
 
@@ -120,11 +97,11 @@ object PluginMain : KotlinPlugin(
             when (this) {
                 is MemberJoinEvent.Invite -> {
                     if (groupId in ActiveGroupList.user && memberJoinEvent(groupId) == 1 && group.botMuteRemaining <= 0)
-                        group.sendMessage("${invitor.nameCardOrNick}邀请${member.nameCardOrNick}大佬加入群聊")
+                        group.sendMessage("哇啊,${invitor.nameCardOrNick}拐卖到了${member.nameCardOrNick}")
                 }          // 邀请加入播报
                 is MemberJoinEvent.Active -> {
                     if (groupId in ActiveGroupList.user && memberJoinEvent(groupId) == 1 && group.botMuteRemaining <= 0)
-                        group.sendMessage("欢迎大佬${member.nameCardOrNick}加入群聊")
+                        group.sendMessage("欢迎${member.nameCardOrNick}自投罗网")
                 }          // 主动加入播报
                 is MemberJoinEvent.Retrieve -> {
                     if (groupId in ActiveGroupList.user && memberJoinEvent(groupId) == 1 && group.botMuteRemaining <= 0)
@@ -221,11 +198,11 @@ object PluginMain : KotlinPlugin(
             }
         }
         // 常驻任务
-        if (MySetting.resident) residentTask()
+//        if (MySetting.resident) residentTask()
 
-        PluginMain.launch {
-            CronJob.start()
-        }
+//        PluginMain.launch {
+//            CronJob.start()
+//        }
 
         ActiveGroupList.activationStatusUpdate(false)
     }
@@ -233,9 +210,19 @@ object PluginMain : KotlinPlugin(
     private fun addGroupInfo(groupId: Long) {
         SQLiteJDBC(resolveDataPath("User.db")).apply {
             insert("Policy", arrayOf("groupID"), arrayOf("$groupId"), "加群数据录入:\nFile:PluginMain.kt\tLine:173")
-            insert("SubscribeInfo", arrayOf("groupID"), arrayOf("$groupId"), "加群数据录入:\nFile:PluginMain.Kt\tLine:174")
+            insert(
+                "SubscribeInfo",
+                arrayOf("groupID"),
+                arrayOf("$groupId"),
+                "加群数据录入:\nFile:PluginMain.Kt\tLine:174"
+            )
             insert("ACGImg", arrayOf("groupID"), arrayOf("$groupId"), "加群数据录入:\nFile:PluginMain.Kt\tLine:180")
-            insert("Responsible", arrayOf("groupID"), arrayOf("$groupId"), "加群数据录入:\nFile:PluginMain.Kt\tLine:181")
+            insert(
+                "Responsible",
+                arrayOf("groupID"),
+                arrayOf("$groupId"),
+                "加群数据录入:\nFile:PluginMain.Kt\tLine:181"
+            )
         }.closeDB()
     }
 
@@ -298,15 +285,6 @@ object PluginMain : KotlinPlugin(
         ).run { UserPolicy(this) }
         dbObject.closeDB()
         return policy.groupNotification
-    }
-
-    private fun residentTask() {
-        val t = LocalDateTime.now() //序列号
-        CronJob.addJob(t.dayOfYear * 10000 + t.hour * 100 + t.minute / 10 * 10 + 10, DynamicPush)
-        //            val n2 = t.dayOfYear * 10000 + t.hour * 100 // 现在整点
-        CronJob.addJob(t.dayOfYear * 10000 + t.hour * 100 + 100, TellTime)
-        //            val n3 = t.dayOfYear * 10000 + 20 * 100     // 今天20点
-        CronJob.addJob((t.dayOfYear + 1) * 10000 + 20 * 100, DailyReminder)
     }
 
     private fun dataBastInit() {
@@ -373,43 +351,5 @@ object PluginMain : KotlinPlugin(
         }.closeDB()
         logger.info("初始化基础数据库完成")
         logger.warning("请自行检查 AssetData.db 是否存在于 Data 目录")
-    }
-
-    override fun onDisable() {
-//        PluginMain.launch{ announcement("正在关闭") } // 关闭太快发不出来
-
-        SignIn.unregister()             // 签到
-        CrowdVerdict.unregister()       // 众裁
-        SauceNAO.unregister()           // 搜图
-        Test.unregister()               // 测试
-        MinesweeperGame.unregister()    // 扫雷
-        Schedule.unregister()           // 日程表
-        TicTacToeGame.unregister()      // 井字棋
-        GroupPolicy.unregister()        // 群策略
-        Music.unregister()              // 点歌姬
-        Calculator.unregister()         // 计算器
-        ASoulArticle.unregister()       // 小作文
-        Wordle.unregister()             // 猜单词
-        PushBoxGame.unregister()        // 推箱子
-        GroupWife.unregister()          // 群老婆
-        RollDice.unregister()           // 简易骰娘
-        Construction.unregister()       // 建造时间
-        TraceMoe.unregister()           // 以图搜番
-        Duel.unregister()               // 禁言决斗
-        MyHelp.unregister()             // 帮助功能
-        AutoBanned.unregister()         // 自助禁言
-        AcgImage.unregister()           // 随机图片
-        ShipMap.unregister()            // 打捞地图
-        SendDynamic.unregister()        // 动态查询
-        WikiAzurLane.unregister()       // 碧蓝Wiki
-        Roster.unregister()             // 碧蓝和谐名
-        Birthday.unregister()           // 舰船下水日
-        CalculationExp.unregister()     // 经验计算器
-        AI.unregister()                 // 图灵数据库增删改查
-        PlayerInfo.unregister()         // 玩家信息
-        CultivationSystem.register()    // 养成系统
-        SimulateConstruction.unregister()// 模拟建造
-
-        PluginMain.cancel()
     }
 }

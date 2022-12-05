@@ -108,7 +108,9 @@ class SQLiteJDBC(DbPath: Path) {
                 .apply {
                     if (next()) (1..metaData.columnCount).forEach { row[metaData.getColumnName(it)] = getObject(it) }
                 }.close()
-        }.onFailure { PluginMain.logger.error { "$log\n${it.message}" } }
+        }.onFailure {
+//            PluginMain.logger.error { "$log\n${it.message}" }
+        }
         statement.close()
         return row
     }
@@ -186,6 +188,10 @@ class SQLiteJDBC(DbPath: Path) {
     /**
      * 执行给定的查询语句
      */
+    fun executeQuerySQL(sql: String): MutableList<MutableMap<String, Any?>> {
+        return executeQuerySQL(sql, "");
+    }
+
     fun executeQuerySQL(sql: String, log: String): MutableList<MutableMap<String, Any?>> {
         val resultList: MutableList<MutableMap<String, Any?>> = ArrayList()
         if (connection == null) return resultList

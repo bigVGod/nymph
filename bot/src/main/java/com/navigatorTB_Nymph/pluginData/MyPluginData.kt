@@ -12,9 +12,10 @@ object MyPluginData : AutoSavePluginData("TB_Data") { // "name" 是保存的文�
     val timeStampOfDynamic: MutableMap<Int, Long> by value(
         mutableMapOf(
             233114659 to 1L,
-            161775300 to 1L,
-            233108841 to 1L,
-            401742377 to 1L
+            2071212 to 1L,
+//            161775300 to 1L,
+//            233108841 to 1L,
+//            401742377 to 1L
         )
     )
 
@@ -22,9 +23,9 @@ object MyPluginData : AutoSavePluginData("TB_Data") { // "name" 是保存的文�
     val nameOfDynamic: MutableMap<Int, String> by value(
         mutableMapOf(
             233114659 to "azurLane",
-            161775300 to "arKnights",
-            233108841 to "fateGrandOrder",
-            401742377 to "genShin"
+//            161775300 to "arKnights",
+//            233108841 to "fateGrandOrder",
+//            401742377 to "genShin"
         )
     )
 

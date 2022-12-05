@@ -26,14 +26,14 @@ public class ScienceQuery extends JSimpleCommand {
     }
 
     private ScienceQuery() {
-        super(PluginMain.INSTANCE, "scienceQuery", "科技点查询");
+        super(PluginMain.INSTANCE, "scienceQuery", "科技点查询", "科技");
     }
 
     @Handler
     public void doCommand(@NotNull MemberCommandSenderOnMessage sender, String type, String science) {
 
         List<String> types = Arrays.asList("战列", "正航", "轻航", "战巡", "驱逐", "重巡", "轻巡", "超巡", "潜艇", "战列");
-        List<String> sciences = Arrays.asList("装填", "炮击", "航空", "雷击", "命中");
+        List<String> sciences = Arrays.asList("装填", "炮击", "航空", "雷击", "命中", "机动");
         StringBuilder message;
         if (!types.contains(type)) {
             message = new StringBuilder("舰船类型填写错误，请选择[战列|正航|轻航|战巡|驱逐|重巡|轻巡|超巡|潜艇]");
@@ -46,7 +46,7 @@ public class ScienceQuery extends JSimpleCommand {
             return;
         }
         if (!sciences.contains(science)) {
-            message = new StringBuilder("属性填写错误，请选择[装填|炮击|航空|雷击|命中]");
+            message = new StringBuilder("属性填写错误，请选择[装填|炮击|航空|雷击|命中|机动]");
             sender.sendMessage(message.toString());
             return;
         }

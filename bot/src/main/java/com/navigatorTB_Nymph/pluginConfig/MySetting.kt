@@ -7,7 +7,7 @@ import net.mamoe.mirai.console.data.value
 object MySetting : AutoSavePluginConfig("TB_Setting") {
 
     @ValueDescription("测试模式")
-    val testMod: Boolean by value(false)
+    val testMod: Boolean by value(true)
 
     @ValueDescription("名字")
     val name by value("领航员-TB")
@@ -16,13 +16,13 @@ object MySetting : AutoSavePluginConfig("TB_Setting") {
     val nickname by value("TB")
 
     @ValueDescription("Bot 账号")
-    val BotID by value(123456L)
+    val BotID by value(2991249616L)
 
     @ValueDescription("SauceNAO 的 API Key")
     val SauceNAOKey by value("")
 
     @ValueDescription("超级管理员账号")
-    val AdminID by value(123456L)
+    val AdminID by value(907634014L)
 
     @ValueDescription("手动查询动态UID简称列表")
     val DynamicNameList by value(
@@ -46,7 +46,7 @@ object MySetting : AutoSavePluginConfig("TB_Setting") {
     val undisturbed: List<Int> by value(listOf(-1))
 
     @ValueDescription("启用常驻定时任务")
-    val resident: Boolean by value(true)
+    val resident: Boolean by value(false)
     //    @ValueDescription("数量") // 注释写法, 将会保存在 MySetting.yml 文件中.
 //    var count by value(0)
 //    val nested by value<MyNestedData>() // 嵌套类型是支持的

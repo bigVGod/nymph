@@ -1,7 +1,6 @@
 package com.navigatorTB_Nymph.command.simple
 
 import com.navigatorTB_Nymph.data.GroupUser
-import com.navigatorTB_Nymph.pluginData.ActiveGroupList
 import com.navigatorTB_Nymph.pluginData.UsageStatistics
 import com.navigatorTB_Nymph.pluginMain.PluginMain
 import kotlinx.coroutines.Dispatchers
@@ -33,7 +32,7 @@ object GroupWife : SimpleCommand(
 
     @Handler
     suspend fun MemberCommandSenderOnMessage.main() {
-        if (user.id == 907634014L){
+        if (user.id == 907634014L) {
             val chain = MessageChainBuilder()
             chain.add("你的专属群老婆是")
             chain.add(
@@ -63,17 +62,22 @@ object GroupWife : SimpleCommand(
 
         when (index % 2) {
             -1 -> { //没找到
+                if (user.id in solitaryList) {
+                    sendMessage("今天你还是没有老婆哒！")
+                    return
+                }
                 val wifeList = List(groupWifeList.size) { i -> groupWifeList[i].id }
                 val cache = group.members.filter {
                     it.id !in wifeList && it.id !in solitaryList
                 }.sortedByDescending(NormalMember::lastSpeakTimestamp)
                 val wife = (if (cache.size >= 10) cache.subList(0, 10) else cache).random()
                 if (wife.id == user.id) {
-                    sendMessage("今天你没有老婆哒")
+                    sendMessage("今天你没有老婆哒！")
                     solitaryList.add(user.id)
                     return
                 } else sendMessage(getChain(group, groupWifeList.addPair(user, wife)))
             }
+
             1 -> sendMessage(getChain(group, groupWifeList[index - 1]))
             else -> sendMessage(getChain(group, groupWifeList[index + 1]))
         }
@@ -163,5 +167,6 @@ object GroupWife : SimpleCommand(
         wifeGroupMap.forEach { (_, it) -> it.clear() }
         ntrMap.forEach { (_, it) -> it.clear() }
         byNtrMap.forEach { (_, it) -> it.clear() }
+        solitaryMap.forEach { (_, it) -> it.clear() }
     }
 }

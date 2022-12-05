@@ -1,6 +1,5 @@
 package com.navigatorTB_Nymph.command.composite
 
-import com.navigatorTB_Nymph.pluginData.ActiveGroupList
 import com.navigatorTB_Nymph.pluginData.UsageStatistics
 import com.navigatorTB_Nymph.pluginMain.PluginMain
 import net.mamoe.mirai.console.command.CommandManager
@@ -19,12 +18,12 @@ object WikiAzurLane : CompositeCommand(
     override val usage: String =
         "${CommandManager.commandPrefix}碧蓝wiki [榜单ID]\n" +
                 "榜单ID列表：\n" +
-                "*1* 强度榜,强度主榜\n" +
-                "*2* 强度副榜\n" +
+//                "*1* 强度榜,强度主榜\n" +
+//                "*2* 强度副榜\n" +
                 "*3* 装备榜\n" +
                 "*4* P站榜,社保榜"
 
-    @SubCommand("强度榜", "强度主榜")
+    //    @SubCommand("强度榜", "强度主榜")
     suspend fun MemberCommandSenderOnMessage.strengthRanking() {
         if (group.botMuteRemaining > 0) return
         getWikiImg("PVE用舰船综合性能强度榜", 1).use {
@@ -36,7 +35,7 @@ object WikiAzurLane : CompositeCommand(
         }
     }
 
-    @SubCommand("强度副榜")
+    //    @SubCommand("强度副榜")
     suspend fun MemberCommandSenderOnMessage.strengthDeputyRanking() {
         if (group.botMuteRemaining > 0) return
         getWikiImg("PVE用舰船综合性能强度榜", 2).use {
