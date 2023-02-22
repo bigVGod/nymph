@@ -58,6 +58,30 @@ public class DynamicsTimer extends TimerTask {
                         builder.add(image);
                         group.sendMessage(builder.build());
                     }
+                } else if (type == 4) {
+                    lastDate = timestamp;
+                    JSONObject card = firstCard.getJSONObject("card");
+                    JSONObject item = card.getJSONObject("item");
+                    String content = item.getString("content");
+                    for (Group group : groups) {
+                        MessageChainBuilder builder = new MessageChainBuilder();
+                        builder.add("动态时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(timestamp)) + "\n");
+                        builder.add(content);
+                        group.sendMessage(builder.build());
+                    }
+                } else if (type == 8) {
+                    lastDate = timestamp;
+                    JSONObject card = firstCard.getJSONObject("card");
+                    String content = card.getString("dynamic");
+                    InputStream is = new URL(card.getString("pic")).openConnection().getInputStream();
+                    Image image = Contact.uploadImage(groups.iterator().next(), is);
+                    for (Group group : groups) {
+                        MessageChainBuilder builder = new MessageChainBuilder();
+                        builder.add("动态时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(timestamp)) + "\n");
+                        builder.add(content);
+                        builder.add(image);
+                        group.sendMessage(builder.build());
+                    }
                 } else if (type == 64) {
                     lastDate = timestamp;
                     JSONObject card = firstCard.getJSONObject("card");

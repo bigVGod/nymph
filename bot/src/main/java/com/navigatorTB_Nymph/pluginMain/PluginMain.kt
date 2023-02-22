@@ -3,6 +3,7 @@ package com.navigatorTB_Nymph.pluginMain
 import com.mayabot.nlp.module.summary.KeywordSummary
 import com.mayabot.nlp.segment.Lexers
 import com.navigatorTB_Nymph.Timer.DynamicsTimer
+import com.navigatorTB_Nymph.Timer.GuessTimer
 import com.navigatorTB_Nymph.command.composite.AI
 import com.navigatorTB_Nymph.command.composite.GroupPolicy
 import com.navigatorTB_Nymph.command.composite.WikiAzurLane
@@ -50,6 +51,8 @@ object PluginMain : KotlinPlugin(
         val timer = Timer();
         // 30秒轮巡动态
         timer.schedule(DynamicsTimer(), 0, 30000);
+        // 每个小时+10次猜技能次数
+        timer.schedule(GuessTimer(), 0, 3600000);
 
         MySetting.reload()
 
@@ -89,6 +92,8 @@ object PluginMain : KotlinPlugin(
         DateQuery.INSTANCE.register()
         DynamicQuery.INSTANCE.register()
         EquipQuery.INSTANCE.register()
+        ShipGetter.INSTANCE.register()
+        GuessSkill.INSTANCE.register()
 //        Test.INSTANCE.register()
 
         MyHelp.register()           // 帮助功能
@@ -177,6 +182,13 @@ object PluginMain : KotlinPlugin(
                     MirrorWorldUser.userData.getOrPut(sender.id) { Role(sender.nameCardOrNick) }.chat()
             }
             atBot().not().invoke {
+                var answerMap = GuessSkill.INSTANCE.guessAnswer;
+                if (answerMap.containsKey(group.id) && answerMap[group.id] == message.content.trim()) {
+                    subject.sendMessage(this.sender.nameCardOrNick + "猜对惹");
+                    GuessSkill.INSTANCE.guessTrue(this.sender.id, this.sender.nameCardOrNick);
+                    answerMap.remove(group.id);
+                    return@invoke;
+                }
                 if (group.botMuteRemaining > 0 || group.id !in ActiveGroupList.user) return@invoke
                 val dbObject = SQLiteJDBC(resolveDataPath("User.db"))
                 val policy = dbObject.selectOne(

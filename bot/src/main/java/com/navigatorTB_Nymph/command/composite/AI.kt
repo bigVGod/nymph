@@ -4,7 +4,6 @@ import com.navigatorTB_Nymph.data.AICorpus
 import com.navigatorTB_Nymph.data.QAPair
 import com.navigatorTB_Nymph.data.UserPolicy
 import com.navigatorTB_Nymph.pluginConfig.MySetting
-import com.navigatorTB_Nymph.pluginData.ActiveGroupList
 import com.navigatorTB_Nymph.pluginData.AiTemplate
 import com.navigatorTB_Nymph.pluginMain.PluginMain
 import com.navigatorTB_Nymph.tool.sql.SQLiteJDBC
@@ -111,6 +110,7 @@ object AI : CompositeCommand(
                 }
                 report.joinToString("\n")
             }
+
             else -> {
                 val report = mutableListOf("条目清单:")
                 entryList.forEach {
@@ -247,6 +247,7 @@ object AI : CompositeCommand(
                         r.clear()
                         r.add(it.answer)
                     }
+
                     jaccardIndex == jaccardMax -> r.add(it.answer)
                 }
             }
@@ -256,7 +257,5 @@ object AI : CompositeCommand(
             return
         }
         if (atMe) subject.sendMessage("( -`_´- ) (似乎并没有听懂... ")
-
-
     }
 }

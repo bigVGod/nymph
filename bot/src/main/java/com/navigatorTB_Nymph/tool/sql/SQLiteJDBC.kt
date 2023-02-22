@@ -204,7 +204,8 @@ class SQLiteJDBC(DbPath: Path) {
                     resultList.add(row)
                 }
             }.close()
-        }.onFailure { PluginMain.logger.warning { "$log\n${it.message}" } }
+        }
+        //.onFailure { PluginMain.logger.warning { "$log\n${it.message}" } }
         statement.close()
         return resultList
     }

@@ -38,11 +38,11 @@ public class DynamicQuery extends JSimpleCommand {
     @Handler
     public final void main(@NotNull MemberCommandSenderOnMessage sender, int index) {
         if (index < 0) {
-            sender.sendMessage("就算是小韭菜也预测不到未来的事情！");
+            sender.sendMessage("能预测未来的话小韭菜早就去买彩票了！");
             return;
         }
-        if (index < 0) {
-            sender.sendMessage("就算是小韭菜也记不得那么久之前的事情了！");
+        if (index > 10) {
+            sender.sendMessage("小韭菜不记得那么久以前的事情了！");
             return;
         }
         try {
@@ -73,6 +73,14 @@ public class DynamicQuery extends JSimpleCommand {
                 builder.add(description);
                 builder.add(image);
                 sender.sendMessage(builder.build());
+            } else if (type == 4) {
+                JSONObject card = firstCard.getJSONObject("card");
+                JSONObject item = card.getJSONObject("item");
+                String content = item.getString("content");
+                MessageChainBuilder builder = new MessageChainBuilder();
+                builder.add("动态时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(timestamp)) + "\n");
+                builder.add(content);
+                sender.sendMessage(builder.build());
             } else if (type == 64) {
                 JSONObject card = firstCard.getJSONObject("card");
                 String title = card.getString("title");
@@ -87,6 +95,8 @@ public class DynamicQuery extends JSimpleCommand {
                 builder.add(title + "\n");
                 builder.add(summary + "...");
                 sender.sendMessage(builder.build());
+            } else {
+                sender.sendMessage("是小韭菜不支持的动态类型！");
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -25,11 +25,11 @@ public class DateQuery extends JSimpleCommand {
         int today = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
         switch (s) {
             case "科研":
-                sender.sendMessage("五期科研已经开了" + (today - 194) + "天！还没出彩炮的可以退群了~");
+                sender.sendMessage("五期科研已经开了" + (today + 365 - 194) + "天！还没出三门彩炮的可以退群了~");
                 break;
             case "测试服":
             default:
-                sender.sendMessage("今天是2022年7月" + (today - 181) + "日！测试服是在七月底开哦~");
+                sender.sendMessage("今天是2022年7月" + (today + 365 - 181) + "日！测试服是在七月底开哦~");
         }
     }
 

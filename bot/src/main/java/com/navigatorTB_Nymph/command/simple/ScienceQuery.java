@@ -71,8 +71,8 @@ public class ScienceQuery extends JSimpleCommand {
 
     @Handler
     public void doCommand(@NotNull MemberCommandSenderOnMessage sender, String searchName) {
-        String sql = "select * from ShipScience where name like '%%%s%%'";
-        List<Map<String, Object>> maps = jdbc.executeQuerySQL(String.format(sql, searchName), "ScienceQuery:75");
+        String sql = "select * from ShipScience where (name like '%%%s%%' or alias like '%%%s%%') and obtain != '无'";
+        List<Map<String, Object>> maps = jdbc.executeQuerySQL(String.format(sql, searchName, searchName), "ScienceQuery:75");
         StringBuilder message;
         message = new StringBuilder("名字包含 " + searchName + " 的舰船有：\n");
         for (Map<String, Object> map : maps) {
